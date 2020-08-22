@@ -1,12 +1,20 @@
 package ru.voidelectrics.restaurantvoter.service;
 
+import org.springframework.stereotype.Service;
+import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 
-public class RestaurantService {
+import java.util.List;
 
-    private final RestaurantRepository restaurantRepository;
+@Service
+public class RestaurantService {
+    private final RestaurantRepository repository;
 
     public RestaurantService(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
+        this.repository = restaurantRepository;
+    }
+
+    public List<Restaurant> getAll() {
+        return repository.findAll();
     }
 }
