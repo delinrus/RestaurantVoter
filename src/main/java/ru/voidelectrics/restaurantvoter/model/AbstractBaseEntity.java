@@ -1,5 +1,6 @@
 package ru.voidelectrics.restaurantvoter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
@@ -43,6 +44,7 @@ public abstract class AbstractBaseEntity implements Persistable<Long> {
     }
 
     @Override
+    @JsonIgnore
     public boolean isNew() {
         return this.id == null;
     }
