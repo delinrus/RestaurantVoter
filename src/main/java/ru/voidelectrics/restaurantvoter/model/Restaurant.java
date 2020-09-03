@@ -1,9 +1,6 @@
 package ru.voidelectrics.restaurantvoter.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,16 +12,24 @@ import javax.validation.constraints.Size;
 @Table(name = "restaurants")
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Restaurant extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotNull
     @Size(min = 2, max = 100)
     private String name;
 
-    public Restaurant(String name) {
-        super(null);
+    public Restaurant(long id, String name) {
+        super(id);
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "id=" + id +
+                ", name='" + name +
+                '}';
     }
 }
