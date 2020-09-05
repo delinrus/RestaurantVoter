@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
@@ -13,12 +12,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 @Table(name = "menu_items")
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 public class MenuItem extends AbstractBaseEntity {
 
@@ -38,4 +37,39 @@ public class MenuItem extends AbstractBaseEntity {
     @Column(name = "price", nullable = false)
     @Range(min = 1)
     private int price;
+
+    public MenuItem(Long id, String name, int price) {
+        super(id);
+        this.name = name;
+        this.price = price;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuItem{" +
+                "id=" + id +
+                ", name='" + name +
+                ", price=" + price +
+                ", menuId" + menu.id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        MenuItem menuItem = (MenuItem) o;
+        return price == menuItem.price &&
+                Objects.equals(name, menuItem.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), menu, name, price);
+    }
 }

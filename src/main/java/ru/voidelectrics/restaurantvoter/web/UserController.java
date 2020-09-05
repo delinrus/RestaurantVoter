@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.voidelectrics.restaurantvoter.model.User;
 import ru.voidelectrics.restaurantvoter.service.UserService;
+import ru.voidelectrics.restaurantvoter.web.controller.RestaurantController;
 
 import java.util.List;
 

@@ -1,9 +1,6 @@
 package ru.voidelectrics.restaurantvoter.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -19,6 +16,7 @@ import java.util.Set;
 @Getter
 @ToString
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class User extends AbstractBaseEntity {
 
     @Column(name = "email", nullable = false, unique = true)
