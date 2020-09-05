@@ -19,6 +19,11 @@ INSERT INTO users(id, email, password, role)
 VALUES 	(100006, 'user@mail.ru', 'user', 'USER'),
         (100007, 'admin@mail.ru', 'admin', 'ADMIN');
 
+INSERT INTO user_roles (role, user_id)
+VALUES ('USER', 100006),
+       ('ADMIN', 100007),
+       ('USER', 100007);
+
 INSERT INTO menu_items(id, menu_id, name, price)
 VALUES 	(100008, 100002, 'Божественная яишенка', 1000),
         (100009, 100002, 'Блинчики', 500),

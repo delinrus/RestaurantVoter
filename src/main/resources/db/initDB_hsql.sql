@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS votes;
 DROP TABLE IF EXISTS menu_items;
 DROP TABLE IF EXISTS menus;
+DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS restaurants;
 DROP SEQUENCE global_seq IF EXISTS;
@@ -12,6 +13,14 @@ CREATE TABLE users (
    email 			VARCHAR(255)				NOT NULL,
    password 		VARCHAR(255) 				NOT NULL,
    role			    VARCHAR(255)	            NOT NULL
+);
+
+CREATE TABLE user_roles
+(
+    user_id INTEGER NOT NULL,
+    role    VARCHAR(255),
+    CONSTRAINT user_roles_idx UNIQUE (user_id, role),
+    FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE
 );
 
 CREATE TABLE restaurants (
