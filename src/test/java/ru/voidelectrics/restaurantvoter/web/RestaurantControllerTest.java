@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANTS;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT_MATCHER;
+import static ru.voidelectrics.restaurantvoter.TestUtil.userHttpBasic;
+import static ru.voidelectrics.restaurantvoter.UserTestData.USER;
 
 class RestaurantControllerTest extends AbstractControllerTest {
 
@@ -16,7 +18,8 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

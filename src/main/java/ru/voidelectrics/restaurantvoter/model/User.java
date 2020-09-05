@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
@@ -40,6 +41,10 @@ public class User extends AbstractBaseEntity {
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-
-
+    public User(Long id, String email, String password, Role role, Role... roles) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        setRoles(EnumSet.of(role, roles));
+    }
 }
