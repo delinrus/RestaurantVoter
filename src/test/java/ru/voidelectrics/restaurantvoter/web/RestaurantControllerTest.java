@@ -7,14 +7,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.service.RestaurantService;
+import ru.voidelectrics.restaurantvoter.web.controller.RestaurantController;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.*;
-import static ru.voidelectrics.restaurantvoter.TestUtil.readFromJson;
-import static ru.voidelectrics.restaurantvoter.TestUtil.userHttpBasic;
+import static ru.voidelectrics.restaurantvoter.TestUtil.*;
 import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN;
 
 class RestaurantControllerTest extends AbstractControllerTest {
@@ -25,7 +27,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/restaurants"))
+        perform(MockMvcRequestBuilders.get(RestaurantController.REST_ALL_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -36,7 +38,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     void create() throws Exception {
         Restaurant newRestaurant = new Restaurant(null, "foo");
 
-        ResultActions action = perform(MockMvcRequestBuilders.post("/rest/admin/restaurants")
+        ResultActions action = perform(MockMvcRequestBuilders.post(RestaurantController.REST_ADMIN_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRestaurant)));
@@ -46,5 +48,14 @@ class RestaurantControllerTest extends AbstractControllerTest {
         newRestaurant.setId(newId);
         RESTAURANT_MATCHER.assertMatch(created, newRestaurant);
         RESTAURANT_MATCHER.assertMatch(restaurantService.get(newId), newRestaurant);
+    }
+
+    @Test
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(RestaurantController.REST_ADMIN_URL + '/' + RESTAURANT1_ID)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isNoContent());
+
+        validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), EntityNotFoundException.class);
     }
 }

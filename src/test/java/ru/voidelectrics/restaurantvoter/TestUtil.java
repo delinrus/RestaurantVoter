@@ -12,6 +12,9 @@ import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.voidelectrics.restaurantvoter.util.ValidationUtil.getRootCause;
+
 public class TestUtil {
     public static String getContent(MvcResult result) throws UnsupportedEncodingException {
         return result.getResponse().getContentAsString();
@@ -40,5 +43,15 @@ public class TestUtil {
 
     public static RequestPostProcessor userAuth(User user) {
         return SecurityMockMvcRequestPostProcessors.authentication(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+    }
+
+    public static  <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
+        assertThrows(rootExceptionClass, () -> {
+            try {
+                runnable.run();
+            } catch (Exception e) {
+                throw getRootCause(e);
+            }
+        });
     }
 }

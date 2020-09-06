@@ -47,4 +47,8 @@ public class RestaurantService {
     public Restaurant get(Long id) {
         return repository.getOne(id);
     }
+
+    public void delete(long id) {
+        repository.deleteById(id);
+    }
 }
