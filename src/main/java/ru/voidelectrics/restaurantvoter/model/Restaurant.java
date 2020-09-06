@@ -20,7 +20,7 @@ public class Restaurant extends AbstractBaseEntity {
     @Size(min = 2, max = 100)
     private String name;
 
-    public Restaurant(long id, String name) {
+    public Restaurant(Long id, String name) {
         super(id);
         this.name = name;
     }

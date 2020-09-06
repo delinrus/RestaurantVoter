@@ -2,9 +2,8 @@ package ru.voidelectrics.restaurantvoter.web.controller;
 
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.service.RestaurantService;
 import ru.voidelectrics.restaurantvoter.to.RestaurantTo;
 
@@ -13,9 +12,8 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/rest", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
-    public static final String REST_URL = "/rest/restaurants";
     private static final Logger log = getLogger(RestaurantController.class);
 
     private final RestaurantService service;
@@ -24,10 +22,15 @@ public class RestaurantController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping(value = "/restaurants")
     public List<RestaurantTo> getAll() {
         log.debug("getAllRestaurants");
         return service.getAll();
     }
 
+    @PostMapping(value = "/admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Restaurant create(@RequestBody Restaurant restaurant) {
+        log.debug("createRestaurant");
+        return service.create(restaurant);
+    }
 }

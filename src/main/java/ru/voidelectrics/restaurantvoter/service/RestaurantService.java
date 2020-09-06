@@ -2,6 +2,8 @@ package ru.voidelectrics.restaurantvoter.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 import ru.voidelectrics.restaurantvoter.repository.VoteRepository;
@@ -35,5 +37,14 @@ public class RestaurantService {
                         menuRepository.getByDateAndRestaurantId(today, r.id()),
                         voteRepository.countByDateAndRestaurantId(today, r.id())))
                 .collect(Collectors.toList());
+    }
+
+    public Restaurant create(Restaurant restaurant) {
+        Assert.notNull(restaurant, "restaurant must not be null");
+        return repository.save(restaurant);
+    }
+
+    public Restaurant get(Long id) {
+        return repository.getOne(id);
     }
 }

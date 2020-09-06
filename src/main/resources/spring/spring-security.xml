@@ -8,11 +8,11 @@
         <http-basic/>
         <intercept-url pattern="/rest/votes/**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/rest/restaurants" access="permitAll()"/>
+        <intercept-url pattern="/rest/admin/restaurants/**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <csrf disabled="true"/>
     </http>
 
-<!--    <http pattern="/rest/restaurants" security="none"/>-->
 
     <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
 
