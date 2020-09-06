@@ -7,6 +7,8 @@ import static ru.voidelectrics.restaurantvoter.model.AbstractBaseEntity.START_SE
 
 public class UserTestData {
 
+    public static TestMatcher<User> USER_MATCHER = TestMatcher.usingEqualsAssertions(User.class);
+
     public static final long USER_ID = START_SEQ + 6;
     public static final long ADMIN_ID = START_SEQ + 7;
 

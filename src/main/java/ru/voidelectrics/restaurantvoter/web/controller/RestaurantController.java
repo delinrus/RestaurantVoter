@@ -45,4 +45,10 @@ public class RestaurantController {
         service.delete(id);
     }
 
+    @PutMapping(value = REST_ADMIN_URL + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public Restaurant update(@RequestBody Restaurant restaurant, @PathVariable long id) {
+        log.debug("updateRestaurant");
+        return service.update(restaurant, id);
+    }
 }

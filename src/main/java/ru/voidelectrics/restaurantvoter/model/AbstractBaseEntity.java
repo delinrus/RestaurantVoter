@@ -1,16 +1,15 @@
 package ru.voidelectrics.restaurantvoter.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Hibernate;
-import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
+import ru.voidelectrics.restaurantvoter.HasId;
 
 import javax.persistence.*;
 
 @MappedSuperclass
 // http://stackoverflow.com/questions/594597/hibernate-annotations-which-is-better-field-or-property-access
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity implements Persistable<Long> {
+public abstract class AbstractBaseEntity implements HasId {
     public static final int START_SEQ = 100000;
 
     @Id
@@ -41,12 +40,6 @@ public abstract class AbstractBaseEntity implements Persistable<Long> {
     public long id() {
         Assert.notNull(id, "Entity must has id");
         return id;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isNew() {
-        return this.id == null;
     }
 
     @Override

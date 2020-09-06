@@ -20,4 +20,8 @@ public class RestaurantTestData {
     public static final RestaurantTo RESTAURANT_TO1 = new RestaurantTo(RESTAURANT1_ID, "Континенталь", MENU1, 3);
     public static final RestaurantTo RESTAURANT_TO2 = new RestaurantTo(RESTAURANT1_ID + 1, "Дон помидор", MENU3, 0);
     public static final List<RestaurantTo> RESTAURANTS_TOS = List.of(RESTAURANT_TO1, RESTAURANT_TO2);
+
+    public static Restaurant getNew() {
+        return new Restaurant(null, "new Restaurant");
+    }
 }

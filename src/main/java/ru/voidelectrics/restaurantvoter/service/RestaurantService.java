@@ -51,4 +51,9 @@ public class RestaurantService {
     public void delete(long id) {
         repository.deleteById(id);
     }
+
+    public Restaurant update(Restaurant restaurant, long id) {
+        restaurant.setId(id);
+        return repository.save(restaurant);
+    }
 }

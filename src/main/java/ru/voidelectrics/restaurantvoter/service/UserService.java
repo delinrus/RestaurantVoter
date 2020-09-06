@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import ru.voidelectrics.restaurantvoter.AuthorizedUser;
 import ru.voidelectrics.restaurantvoter.model.User;
 import ru.voidelectrics.restaurantvoter.repository.UserRepository;
+import ru.voidelectrics.restaurantvoter.to.UserTo;
+import ru.voidelectrics.restaurantvoter.util.UserUtil;
 
 import java.util.List;
 
@@ -24,6 +26,14 @@ public class UserService implements UserDetailsService {
         return repository.findAll();
     }
 
+    public User get(long id) {
+        return repository.getOne(id);
+    }
+
+    public void delete(long id) {
+        repository.deleteById(id);
+    }
+
     @Override
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.getByEmail(email.toLowerCase());
@@ -31,5 +41,15 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User " + email + " is not found");
         }
         return new AuthorizedUser(user);
+    }
+
+    public User create(UserTo userTo) {
+        return repository.save(UserUtil.createNewFromTo(userTo));
+    }
+
+    public void update(UserTo userTo, long id) {
+        User user = get(id);
+        User updateUser = UserUtil.updateFromTo(user, userTo);
+        repository.save(updateUser);
     }
 }

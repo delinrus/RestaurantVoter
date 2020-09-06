@@ -36,7 +36,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void create() throws Exception {
-        Restaurant newRestaurant = new Restaurant(null, "foo");
+        Restaurant newRestaurant = getNew();
 
         ResultActions action = perform(MockMvcRequestBuilders.post(RestaurantController.REST_ADMIN_URL)
                 .with(userHttpBasic(ADMIN))
@@ -52,6 +52,16 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(RestaurantController.REST_ADMIN_URL + '/' + RESTAURANT1_ID)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isNoContent());
+
+        validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), EntityNotFoundException.class);
+    }
+
+
+    @Test
+    void update() throws Exception {
         perform(MockMvcRequestBuilders.delete(RestaurantController.REST_ADMIN_URL + '/' + RESTAURANT1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());

@@ -2,11 +2,13 @@ package ru.voidelectrics.restaurantvoter.model;
 
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -40,9 +42,20 @@ public class User extends AbstractBaseEntity {
     private Set<Role> roles;
 
     public User(Long id, String email, String password, Role role, Role... roles) {
-        this.id = id;
+        super(id);
         this.email = email;
         this.password = password;
         setRoles(EnumSet.of(role, roles));
+    }
+
+    public User(User user) {
+        super(user.getId());
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        setRoles(user.getRoles());
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 }
