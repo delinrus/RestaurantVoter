@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import ru.voidelectrics.restaurantvoter.AuthorizedUser;
 import ru.voidelectrics.restaurantvoter.model.User;
 import ru.voidelectrics.restaurantvoter.repository.UserRepository;
@@ -12,6 +13,8 @@ import ru.voidelectrics.restaurantvoter.to.UserTo;
 import ru.voidelectrics.restaurantvoter.util.UserUtil;
 
 import java.util.List;
+
+import static ru.voidelectrics.restaurantvoter.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -27,11 +30,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User get(long id) {
-        return repository.getOne(id);
+        User result = repository.findById(id).orElse(null);
+        return checkNotFoundWithId(result, id);
     }
 
     public void delete(long id) {
-        repository.deleteById(id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
     @Override
@@ -51,5 +55,18 @@ public class UserService implements UserDetailsService {
         User user = get(id);
         User updateUser = UserUtil.updateFromTo(user, userTo);
         repository.save(updateUser);
+    }
+
+    public void update(User user) {
+        Assert.notNull(user, "user must not be null");
+        repository.save(user);
+    }
+
+    public User create(User user) {
+        return repository.save(user);
+    }
+
+    public User getByMail(String email) {
+        return repository.getByEmail(email);
     }
 }
