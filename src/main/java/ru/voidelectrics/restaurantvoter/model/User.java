@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
 @Setter
 @Getter
 @NoArgsConstructor
@@ -64,7 +64,7 @@ public class User extends AbstractBaseEntity {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                "email='" + email +
+                ", email='" + email +
                 ", roles=" + roles +
                 '}';
     }
