@@ -1,6 +1,7 @@
 package ru.voidelectrics.restaurantvoter.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -23,6 +24,7 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -35,4 +37,10 @@ public class Vote extends AbstractBaseEntity {
     @JsonFormat(pattern = DateUtil.FORMAT)
     @NotNull
     private LocalDate date;
+
+    public Vote(Long id, Restaurant restaurant, LocalDate date) {
+        super(id);
+        this.restaurant = restaurant;
+        this.date = date;
+    }
 }

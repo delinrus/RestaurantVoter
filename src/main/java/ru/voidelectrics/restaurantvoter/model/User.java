@@ -1,5 +1,6 @@
 package ru.voidelectrics.restaurantvoter.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.util.CollectionUtils;
@@ -16,7 +17,6 @@ import java.util.Set;
 @Table(name = "users")
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class User extends AbstractBaseEntity {
@@ -30,6 +30,7 @@ public class User extends AbstractBaseEntity {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -57,5 +58,14 @@ public class User extends AbstractBaseEntity {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                "email='" + email +
+                ", roles=" + roles +
+                '}';
     }
 }
