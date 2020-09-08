@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import ru.voidelectrics.restaurantvoter.TimeMockingTest;
 
 import javax.annotation.PostConstruct;
 
@@ -20,7 +21,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
         "classpath:spring/spring-db.xml"
 })
 @Transactional
-abstract public class AbstractControllerTest {
+abstract public class AbstractControllerTest extends TimeMockingTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 

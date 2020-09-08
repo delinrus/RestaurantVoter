@@ -1,11 +1,13 @@
 package ru.voidelectrics.restaurantvoter.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.voidelectrics.restaurantvoter.model.Vote;
 import ru.voidelectrics.restaurantvoter.repository.UserRepository;
 import ru.voidelectrics.restaurantvoter.repository.VoteRepository;
 import ru.voidelectrics.restaurantvoter.util.exeption.RequestForbidden;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -14,6 +16,9 @@ import java.util.List;
 public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
+
+    @Autowired
+    private Clock clock;
 
     public VoteService(VoteRepository voteRepository, UserRepository userRepository) {
         this.voteRepository = voteRepository;
@@ -29,9 +34,12 @@ public class VoteService {
             throw new RequestForbidden(RequestForbidden.FORBIDDEN_TIME_MSG);
         }
         vote.setUser(userRepository.getOne(userId));
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(clock);
         vote.setDate(today);
-        //voteRepository.delete();
+        Vote previousVote = voteRepository.getByDateAndUserId(today, userId);
+        if (previousVote != null) {
+            vote.setId(previousVote.getId());
+        }
         return voteRepository.save(vote);
     }
 
@@ -39,9 +47,9 @@ public class VoteService {
         return voteRepository.getByDateAndUserId(date, userId);
     }
 
-    //public static final Vote VOTE2 = new Vote(100024L, RESTAURANT2, LocalDate.parse("2020-08-21"));
-
-    private static boolean isTooLateForChangingVote() {
-        return LocalTime.now().compareTo(LocalTime.of(18, 0)) > 0;
+    private boolean isTooLateForChangingVote() {
+        return LocalTime.now(clock).compareTo(LocalTime.of(11, 0)) > 0;
     }
+
+
 }

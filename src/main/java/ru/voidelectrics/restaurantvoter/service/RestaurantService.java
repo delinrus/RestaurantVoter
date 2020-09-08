@@ -9,6 +9,7 @@ import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 import ru.voidelectrics.restaurantvoter.repository.VoteRepository;
 import ru.voidelectrics.restaurantvoter.to.RestaurantTo;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,13 +24,15 @@ public class RestaurantService {
     @Autowired
     private VoteRepository voteRepository;
 
+    @Autowired
+    private Clock clock;
+
     public RestaurantService(RestaurantRepository restaurantRepository) {
         this.repository = restaurantRepository;
     }
 
     public List<RestaurantTo> getAll() {
-        LocalDate today = LocalDate.of(2020, 8, 22); // TODO: get today date
-
+        LocalDate today = LocalDate.now(clock);
         return repository.findAll().stream()
                 .map(r -> new RestaurantTo(
                         r.id(),

@@ -12,6 +12,8 @@ import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
 import javax.persistence.EntityNotFoundException;
 
+import java.time.Instant;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +29,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
+        clockMock().setInstant(Instant.parse("2020-08-22T09:15:30Z"));
         perform(MockMvcRequestBuilders.get(RestaurantController.REST_ALL_URL))
                 .andExpect(status().isOk())
                 .andDo(print())

@@ -17,7 +17,6 @@ import java.time.LocalDate;
         indexes = {@Index(columnList = "date", name = "votes_date_idx")})
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Vote extends AbstractBaseEntity {
@@ -44,5 +43,14 @@ public class Vote extends AbstractBaseEntity {
         super(id);
         this.restaurant = restaurant;
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "id=" + id +
+                ", restaurant=" + restaurant +
+                ", date=" + date +
+                '}';
     }
 }

@@ -15,7 +15,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
     List<Vote> getAll(@Param("userId") long userId);
 
-//    Vote saveByDate(Vote vote, LocalDate date);
-
     Vote getByDateAndUserId(LocalDate date, long userId);
 }

@@ -5,19 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import ru.voidelectrics.restaurantvoter.TimeMockingTest;
 import ru.voidelectrics.restaurantvoter.model.Vote;
+import ru.voidelectrics.restaurantvoter.util.exeption.RequestForbidden;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
+import static ru.voidelectrics.restaurantvoter.TestUtil.validateRootCause;
 import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN_ID;
 import static ru.voidelectrics.restaurantvoter.UserTestData.USER_ID;
+import static ru.voidelectrics.restaurantvoter.VoteTestData.*;
 
 @SpringJUnitConfig(locations = {
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-class VoteServiceTest {
+class VoteServiceTest extends TimeMockingTest {
 
     @Autowired
     private VoteService service;
@@ -25,7 +30,37 @@ class VoteServiceTest {
     @Test
     void getByDateAndUserId() throws Exception {
         Vote vote = service.getByDateAndUserId(LocalDate.parse("2020-08-22"), ADMIN_ID);
-        System.out.println(vote);
+        VOTE_MATCHER.assertMatch(vote, VOTE3);
+    }
+
+    @Test
+    void changeVote() {
+        clockMock().setInstant(Instant.parse("2020-08-22T09:15:30Z"));
+        Vote created = service.save(getNew(), USER_ID);
+        long newId = created.id();
+        Vote newVote = getNew();
+        newVote.setId(newId);
+        newVote.setDate(LocalDate.parse("2020-08-22"));
+        VOTE_MATCHER.assertMatch(created, newVote);
+        VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-22"), USER_ID), newVote);
+    }
+
+    @Test
+    void changeVoteTooLate() {
+        clockMock().setInstant(Instant.parse("2020-08-22T11:02:00Z"));
+        validateRootCause(() -> service.save(getNew(), USER_ID), RequestForbidden.class);
+    }
+
+    @Test
+    void createNewVote() {
+        clockMock().setInstant(Instant.parse("2020-08-23T09:00:00Z"));
+        Vote created = service.save(getNew(), USER_ID);
+        long newId = created.id();
+        Vote newVote = getNew();
+        newVote.setId(newId);
+        newVote.setDate(LocalDate.parse("2020-08-23"));
+        VOTE_MATCHER.assertMatch(created, newVote);
+        VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-23"), USER_ID), newVote);
     }
 
 }
