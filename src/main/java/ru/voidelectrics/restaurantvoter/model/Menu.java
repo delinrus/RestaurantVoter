@@ -2,7 +2,10 @@ package ru.voidelectrics.restaurantvoter.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.voidelectrics.restaurantvoter.util.DateUtil;
@@ -47,7 +50,7 @@ public class Menu extends AbstractBaseEntity {
         list.add(menuItem);
         list.addAll(Arrays.asList(menuItems));
         this.menuItems = list;
-        this.menuItems.stream().peek( mi -> mi.setMenu(this)).collect(Collectors.toList());
+        this.menuItems.forEach(mi -> mi.setMenu(this));
     }
 
     @Override
@@ -61,8 +64,4 @@ public class Menu extends AbstractBaseEntity {
                 Objects.equals(menuItems, menu.menuItems);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), restaurant, date, menuItems);
-    }
 }

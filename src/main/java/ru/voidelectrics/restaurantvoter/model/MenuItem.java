@@ -52,9 +52,9 @@ public class MenuItem extends AbstractBaseEntity {
     public String toString() {
         return "MenuItem{" +
                 "id=" + id +
-                ", name='" + name +
+                ", name=" + name +
                 ", price=" + price +
-                ", menuId" + menu.id +
+                ", menuId=" + menu.id +
                 '}';
     }
 
@@ -66,10 +66,5 @@ public class MenuItem extends AbstractBaseEntity {
         MenuItem menuItem = (MenuItem) o;
         return price == menuItem.price &&
                 Objects.equals(name, menuItem.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), menu, name, price);
     }
 }
