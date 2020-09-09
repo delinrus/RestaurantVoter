@@ -1,6 +1,8 @@
 package ru.voidelectrics.restaurantvoter.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.voidelectrics.restaurantvoter.model.Restaurant;
@@ -31,17 +33,17 @@ public class RestaurantService {
         this.repository = restaurantRepository;
     }
 
+    @Cacheable("restaurantTos")
     public List<RestaurantTo> getAll() {
         LocalDate today = LocalDate.now(clock);
         return repository.findAll().stream()
                 .map(r -> new RestaurantTo(
                         r.id(),
                         r.getName(),
-                        menuRepository.getByDateAndRestaurantId(today, r.id()),
-                        voteRepository.countByDateAndRestaurantId(today, r.id())))
+                        menuRepository.getByDateAndRestaurantId(today, r.id())))
                 .collect(Collectors.toList());
     }
-
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
         return repository.save(restaurant);
@@ -51,10 +53,12 @@ public class RestaurantService {
         return repository.getOne(id);
     }
 
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public void delete(long id) {
         repository.deleteById(id);
     }
 
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public Restaurant update(Restaurant restaurant, long id) {
         restaurant.setId(id);
         return repository.save(restaurant);

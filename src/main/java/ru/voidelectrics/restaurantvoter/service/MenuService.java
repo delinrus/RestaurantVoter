@@ -1,6 +1,7 @@
 package ru.voidelectrics.restaurantvoter.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.model.MenuItem;
@@ -38,6 +39,7 @@ public class MenuService {
         return repository.getByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
     }
 
+    @CacheEvict(value = "restaurantTos", allEntries = true)
     public Menu saveForToday(Menu menu) {
         LocalDate today = LocalDate.now(clock);
         menu.setId(null);

@@ -20,13 +20,10 @@ public class RestaurantTo {
 
     private Menu todayMenu;
 
-    private int todayUserVoted;
-
-    public RestaurantTo(Long id, String name, Menu todayMenu, int todayUserVoted) {
+    public RestaurantTo(Long id, String name, Menu todayMenu) {
         this.id = id;
         this.name = name;
         this.todayMenu = todayMenu;
-        this.todayUserVoted = todayUserVoted;
     }
 
     @Override
@@ -34,14 +31,13 @@ public class RestaurantTo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantTo that = (RestaurantTo) o;
-        return todayUserVoted == that.todayUserVoted &&
-                Objects.equals(id, that.id) &&
+        return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(todayMenu, that.todayMenu);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, todayMenu, todayUserVoted);
+        return Objects.hash(id, name, todayMenu);
     }
 }
