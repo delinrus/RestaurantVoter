@@ -1,6 +1,7 @@
 package ru.voidelectrics.restaurantvoter.web.controller;
 
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.voidelectrics.restaurantvoter.model.Vote;
@@ -34,8 +35,9 @@ public class VoteController {
     }
 
     @PostMapping
-    public Vote save(@Valid @RequestBody VoteTo voteTo) {
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void save(@Valid @RequestBody VoteTo voteTo) {
         long userId = SecurityUtil.authUserId();
-        return service.save(voteTo.getRestaurantId(), userId);
+        service.save(voteTo.getRestaurantId(), userId);
     }
 }

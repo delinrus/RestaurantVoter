@@ -52,6 +52,10 @@ public class VoteService {
         return voteRepository.save(vote);
     }
 
+    public long countTodayVotes(long restaurantId) {
+        return voteRepository.countByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
+    }
+
     public Vote getByDateAndUserId(LocalDate date, long userId) {
         return voteRepository.getByDateAndUserId(date, userId);
     }

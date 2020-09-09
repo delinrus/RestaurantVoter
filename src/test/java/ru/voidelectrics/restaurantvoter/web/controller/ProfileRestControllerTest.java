@@ -9,7 +9,6 @@ import ru.voidelectrics.restaurantvoter.model.User;
 import ru.voidelectrics.restaurantvoter.service.UserService;
 import ru.voidelectrics.restaurantvoter.to.UserTo;
 import ru.voidelectrics.restaurantvoter.util.UserUtil;
-import ru.voidelectrics.restaurantvoter.web.AbstractControllerTest;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

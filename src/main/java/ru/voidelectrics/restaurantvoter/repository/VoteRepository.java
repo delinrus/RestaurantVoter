@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface VoteRepository extends JpaRepository<Vote, Long> {
 
-    int countByDateAndRestaurantId(LocalDate date, long restaurantId);
+    long countByDateAndRestaurantId(LocalDate date, long restaurantId);
 
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
     List<Vote> getAll(@Param("userId") long userId);

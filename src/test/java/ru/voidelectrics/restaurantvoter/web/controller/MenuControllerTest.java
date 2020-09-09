@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.voidelectrics.restaurantvoter.MenuTestData;
 import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.service.MenuService;
-import ru.voidelectrics.restaurantvoter.web.AbstractControllerTest;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
 import java.time.Instant;
@@ -24,9 +23,12 @@ import static ru.voidelectrics.restaurantvoter.MenuTestData.MENU_MATCHER;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID;
 import static ru.voidelectrics.restaurantvoter.TestUtil.readFromJson;
 import static ru.voidelectrics.restaurantvoter.TestUtil.userHttpBasic;
+import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN;
 import static ru.voidelectrics.restaurantvoter.UserTestData.USER;
 
 class MenuControllerTest extends AbstractControllerTest {
+
+    private static final String REST_URL = MenuController.REST_URL + '/';
 
     @Autowired
     private MenuService menuService;
@@ -38,8 +40,8 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void getForToday() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/menus" + "/today" + "?restaurantId=" + RESTAURANT1_ID)
-                .with(userHttpBasic(USER)))
+        perform(MockMvcRequestBuilders.get(REST_URL + "/today" + "?restaurantId=" + RESTAURANT1_ID)
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -50,9 +52,9 @@ class MenuControllerTest extends AbstractControllerTest {
     void saveForToday() throws Exception {
         Menu newMenu = MenuTestData.getNew();
 
-        ResultActions action = perform(MockMvcRequestBuilders.post("/rest/menus" + "/today")
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/today")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(userHttpBasic(USER))
+                .with(userHttpBasic(ADMIN))
                 .content(JsonUtil.writeValue(newMenu)))
                 .andDo(print())
                 .andExpect(status().isOk());

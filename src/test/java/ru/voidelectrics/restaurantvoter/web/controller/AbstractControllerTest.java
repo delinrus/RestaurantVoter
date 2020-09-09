@@ -1,4 +1,4 @@
-package ru.voidelectrics.restaurantvoter.web;
+package ru.voidelectrics.restaurantvoter.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;

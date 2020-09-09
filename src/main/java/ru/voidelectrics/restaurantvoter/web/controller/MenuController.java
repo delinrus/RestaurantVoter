@@ -13,9 +13,11 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
-@RequestMapping(value = "/rest/menus", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = MenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuController {
     private static final Logger log = getLogger(RestaurantController.class);
+
+    static final String REST_URL = "/rest/admin/menus";
 
     private final MenuService service;
 

@@ -8,7 +8,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.voidelectrics.restaurantvoter.model.User;
 import ru.voidelectrics.restaurantvoter.service.UserService;
 import ru.voidelectrics.restaurantvoter.util.exeption.NotFoundException;
-import ru.voidelectrics.restaurantvoter.web.AbstractControllerTest;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

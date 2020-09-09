@@ -35,25 +35,24 @@ class VoteServiceTest extends TimeMockingTest {
     }
 
     @Test
-    void changeVote() {
+    void changeVote() throws Exception{
         clockMock().setInstant(Instant.parse("2020-08-22T09:15:30Z"));
         Vote created = service.save(RESTAURANT1_ID, USER_ID);
         long newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
         newVote.setDate(LocalDate.parse("2020-08-22"));
-        VOTE_MATCHER.assertMatch(created, newVote);
         VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-22"), USER_ID), newVote);
     }
 
     @Test
-    void changeVoteTooLate() {
+    void changeVoteTooLate() throws Exception{
         clockMock().setInstant(Instant.parse("2020-08-22T11:02:00Z"));
         validateRootCause(() -> service.save(RESTAURANT1_ID, USER_ID), RequestForbidden.class);
     }
 
     @Test
-    void createNewVote() {
+    void createNewVote() throws Exception{
         clockMock().setInstant(Instant.parse("2020-08-23T09:00:00Z"));
         Vote created = service.save(RESTAURANT1_ID, USER_ID);
         long newId = created.id();

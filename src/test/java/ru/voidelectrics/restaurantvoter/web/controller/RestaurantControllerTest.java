@@ -1,17 +1,16 @@
-package ru.voidelectrics.restaurantvoter.web;
+package ru.voidelectrics.restaurantvoter.web.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.voidelectrics.restaurantvoter.TestMatcher;
 import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.service.RestaurantService;
-import ru.voidelectrics.restaurantvoter.web.controller.RestaurantController;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
 import javax.persistence.EntityNotFoundException;
-
 import java.time.Instant;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,6 +22,7 @@ import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN;
 
 class RestaurantControllerTest extends AbstractControllerTest {
 
+    private final static TestMatcher<Long> LONG_MATCHER = TestMatcher.usingEqualsAssertions(Long.class);
 
     @Autowired
     private RestaurantService restaurantService;
@@ -83,5 +83,15 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(newRestaurant)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void countVotes() throws Exception {
+        clockMock().setInstant(Instant.parse("2020-08-22T17:15:30Z"));
+        perform(MockMvcRequestBuilders.get(RestaurantController.REST_ALL_URL + '/' + RESTAURANT1_ID + "/votecount"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(LONG_MATCHER.contentJson(new Long(2)));
     }
 }
