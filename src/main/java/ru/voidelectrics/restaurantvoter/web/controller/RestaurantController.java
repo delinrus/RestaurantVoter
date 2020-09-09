@@ -1,6 +1,7 @@
 package ru.voidelectrics.restaurantvoter.web.controller;
 
 import org.slf4j.Logger;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import ru.voidelectrics.restaurantvoter.service.VoteService;
 import ru.voidelectrics.restaurantvoter.to.RestaurantTo;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -60,9 +62,10 @@ public class RestaurantController {
     }
 
     @GetMapping(value = REST_ALL_URL + "/{id}/votecount")
-    public long countVotes(@PathVariable long id) {
+    public long countVotes(@PathVariable long id,
+                           @RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.debug("getAllRestaurants");
-        return voteService.countTodayVotes(id);
+        return voteService.countVotes(id, date);
     }
 
 }

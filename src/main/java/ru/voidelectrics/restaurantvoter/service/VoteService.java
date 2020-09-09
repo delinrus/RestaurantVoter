@@ -56,6 +56,10 @@ public class VoteService {
         return voteRepository.countByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
     }
 
+    public long countVotes(long restaurantId, LocalDate date) {
+        return voteRepository.countByDateAndRestaurantId(date, restaurantId);
+    }
+
     public Vote getByDateAndUserId(LocalDate date, long userId) {
         return voteRepository.getByDateAndUserId(date, userId);
     }

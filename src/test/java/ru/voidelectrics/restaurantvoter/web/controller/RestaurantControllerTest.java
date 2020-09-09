@@ -88,7 +88,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     void countVotes() throws Exception {
         clockMock().setInstant(Instant.parse("2020-08-22T17:15:30Z"));
-        perform(MockMvcRequestBuilders.get(RestaurantController.REST_ALL_URL + '/' + RESTAURANT1_ID + "/votecount"))
+        perform(MockMvcRequestBuilders.get(RestaurantController.REST_ALL_URL + '/' + RESTAURANT1_ID + "/votecount?date=2020-08-22"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
