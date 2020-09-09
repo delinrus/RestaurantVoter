@@ -54,7 +54,7 @@ public class MenuItem extends AbstractBaseEntity {
                 "id=" + id +
                 ", name=" + name +
                 ", price=" + price +
-                ", menuId=" + menu.id +
+                (menu != null ?  ", menuId=" + menu.id  :  "") +
                 '}';
     }
 

@@ -71,4 +71,17 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
         validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), EntityNotFoundException.class);
     }
+
+    @Test
+    void createInvalid() throws Exception {
+        Restaurant newRestaurant = getNew();
+        newRestaurant.setName("x");
+
+        ResultActions action = perform(MockMvcRequestBuilders.post(RestaurantController.REST_ADMIN_URL)
+                .with(userHttpBasic(ADMIN))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newRestaurant)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }

@@ -8,6 +8,7 @@ import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.service.RestaurantService;
 import ru.voidelectrics.restaurantvoter.to.RestaurantTo;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -33,7 +34,7 @@ public class RestaurantController {
     }
 
     @PostMapping(value = REST_ADMIN_URL, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Restaurant create(@RequestBody Restaurant restaurant) {
+    public Restaurant create(@Valid @RequestBody Restaurant restaurant) {
         log.debug("createRestaurant");
         return service.create(restaurant);
     }
@@ -47,7 +48,7 @@ public class RestaurantController {
 
     @PutMapping(value = REST_ADMIN_URL + "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public Restaurant update(@RequestBody Restaurant restaurant, @PathVariable long id) {
+    public Restaurant update(@Valid @RequestBody Restaurant restaurant, @PathVariable long id) {
         log.debug("updateRestaurant");
         return service.update(restaurant, id);
     }

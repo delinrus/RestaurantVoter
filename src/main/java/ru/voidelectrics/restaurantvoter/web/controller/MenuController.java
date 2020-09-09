@@ -5,7 +5,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.service.MenuService;
+import ru.voidelectrics.restaurantvoter.to.MenuTo;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -32,7 +34,7 @@ public class MenuController {
     }
 
     @PostMapping(value = "/today")
-    public Menu saveForToday(@RequestBody Menu menu) {
-        return service.saveForToday(menu);
+    public Menu saveForToday(@Valid @RequestBody MenuTo menuTo) {
+        return service.saveForToday(menuTo);
     }
 }

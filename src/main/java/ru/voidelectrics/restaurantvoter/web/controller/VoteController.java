@@ -5,8 +5,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.voidelectrics.restaurantvoter.model.Vote;
 import ru.voidelectrics.restaurantvoter.service.VoteService;
+import ru.voidelectrics.restaurantvoter.to.VoteTo;
 import ru.voidelectrics.restaurantvoter.web.SecurityUtil;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -32,10 +34,8 @@ public class VoteController {
     }
 
     @PostMapping
-    public Vote save(@RequestBody Vote vote) {
+    public Vote save(@Valid @RequestBody VoteTo voteTo) {
         long userId = SecurityUtil.authUserId();
-        return service.save(vote, userId);
+        return service.save(voteTo.getRestaurantId(), userId);
     }
-
-
 }

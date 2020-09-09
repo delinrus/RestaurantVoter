@@ -15,7 +15,8 @@ public class VoteTestData {
     public static final Vote VOTE3 = new Vote(100025L, RESTAURANT1, LocalDate.parse("2020-08-22"));  // for user admin@mail.ru
     public static final Vote VOTE4 = new Vote(100026L, RESTAURANT1, LocalDate.parse("2020-08-20"));  // for user admin@mail.ru
 
+
     public static Vote getNew() {
-        return new Vote(null, RESTAURANT1, null);
+        return new Vote(null, RESTAURANT1, LocalDate.parse("2020-08-22"));
     }
 }

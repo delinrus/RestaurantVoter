@@ -12,6 +12,7 @@ import ru.voidelectrics.restaurantvoter.util.exeption.RequestForbidden;
 import java.time.Instant;
 import java.time.LocalDate;
 
+import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID;
 import static ru.voidelectrics.restaurantvoter.TestUtil.validateRootCause;
 import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN_ID;
 import static ru.voidelectrics.restaurantvoter.UserTestData.USER_ID;
@@ -36,7 +37,7 @@ class VoteServiceTest extends TimeMockingTest {
     @Test
     void changeVote() {
         clockMock().setInstant(Instant.parse("2020-08-22T09:15:30Z"));
-        Vote created = service.save(getNew(), USER_ID);
+        Vote created = service.save(RESTAURANT1_ID, USER_ID);
         long newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
@@ -48,19 +49,17 @@ class VoteServiceTest extends TimeMockingTest {
     @Test
     void changeVoteTooLate() {
         clockMock().setInstant(Instant.parse("2020-08-22T11:02:00Z"));
-        validateRootCause(() -> service.save(getNew(), USER_ID), RequestForbidden.class);
+        validateRootCause(() -> service.save(RESTAURANT1_ID, USER_ID), RequestForbidden.class);
     }
 
     @Test
     void createNewVote() {
         clockMock().setInstant(Instant.parse("2020-08-23T09:00:00Z"));
-        Vote created = service.save(getNew(), USER_ID);
+        Vote created = service.save(RESTAURANT1_ID, USER_ID);
         long newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
         newVote.setDate(LocalDate.parse("2020-08-23"));
-        VOTE_MATCHER.assertMatch(created, newVote);
         VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-23"), USER_ID), newVote);
     }
-
 }

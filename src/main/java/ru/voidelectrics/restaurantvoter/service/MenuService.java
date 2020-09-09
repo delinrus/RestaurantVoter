@@ -7,6 +7,8 @@ import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.model.MenuItem;
 import ru.voidelectrics.restaurantvoter.repository.MenuItemRepository;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
+import ru.voidelectrics.restaurantvoter.to.MenuTo;
+import ru.voidelectrics.restaurantvoter.util.ToConversionUtil;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -40,7 +42,8 @@ public class MenuService {
     }
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
-    public Menu saveForToday(Menu menu) {
+    public Menu saveForToday(MenuTo menuTo) {
+        Menu menu = ToConversionUtil.convert(menuTo);
         LocalDate today = LocalDate.now(clock);
         menu.setId(null);
         Menu previous = repository.getByDateAndRestaurantId(today, menu.getRestaurant().getId());
