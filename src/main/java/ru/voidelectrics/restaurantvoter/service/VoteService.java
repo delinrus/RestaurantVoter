@@ -37,18 +37,18 @@ public class VoteService {
 
     @Transactional
     public Vote save(long restaurantId, long userId) {
-        if (isTooLateForChangingVote()) {
-            throw new RequestForbidden(RequestForbidden.FORBIDDEN_TIME_MSG);
-        }
         LocalDate today = LocalDate.now(clock);
         Vote vote = new Vote();
+        Vote previousVote = voteRepository.getByDateAndUserId(today, userId);
+        if (previousVote != null) {
+            if (isTooLateForChangingVote()) {
+                throw new RequestForbidden(RequestForbidden.FORBIDDEN_TIME_MSG);
+            }
+            vote.setId(previousVote.getId());
+        }
         vote.setUser(userRepository.getOne(userId));
         vote.setDate(today);
         vote.setRestaurant(restaurantRepository.getOne(restaurantId));
-        Vote previousVote = voteRepository.getByDateAndUserId(today, userId);
-        if (previousVote != null) {
-            vote.setId(previousVote.getId());
-        }
         return voteRepository.save(vote);
     }
 
