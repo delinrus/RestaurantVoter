@@ -15,9 +15,9 @@ VALUES 	(100000, today()),
         (100001, today()),
         (100001, '2020-08-21');
 
-INSERT INTO users(email, password, role)
-VALUES 	('user@mail.ru', 'user', 'USER'),
-        ('admin@mail.ru', 'admin', 'ADMIN');
+INSERT INTO users(email, password)
+VALUES 	('user@mail.ru', 'user'),
+        ('admin@mail.ru', 'admin');
 
 INSERT INTO user_roles (role, user_id)
 VALUES ('USER', 100006),

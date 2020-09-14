@@ -1,7 +1,5 @@
 package ru.voidelectrics.restaurantvoter.service;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import java.util.List;
 import static ru.voidelectrics.restaurantvoter.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("userService")
-@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
     private final UserRepository repository;
 
@@ -48,7 +45,8 @@ public class UserService implements UserDetailsService {
     }
 
     public User create(UserTo userTo) {
-        return repository.save(UserUtil.createNewFromTo(userTo));
+        User user = UserUtil.createNewFromTo(userTo);
+        return repository.save(user);
     }
 
     public void update(UserTo userTo, long id) {
