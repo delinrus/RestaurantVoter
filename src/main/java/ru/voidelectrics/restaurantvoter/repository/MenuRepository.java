@@ -8,11 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.voidelectrics.restaurantvoter.model.Menu;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
     Menu getByDateAndRestaurantId(LocalDate date, long restaurantId);
+
+    List<Menu> getByDate(LocalDate date);
 
     @Modifying
     @Transactional

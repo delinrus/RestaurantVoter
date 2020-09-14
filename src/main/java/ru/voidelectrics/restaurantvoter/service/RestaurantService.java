@@ -1,10 +1,11 @@
 package ru.voidelectrics.restaurantvoter.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
@@ -20,29 +21,40 @@ import java.util.stream.Collectors;
 public class RestaurantService {
     private final RestaurantRepository repository;
 
-    @Autowired
-    private MenuRepository menuRepository;
+    private final MenuRepository menuRepository;
 
-    @Autowired
-    private VoteRepository voteRepository;
+    private final VoteRepository voteRepository;
 
-    @Autowired
-    private Clock clock;
+    private final Clock clock;
 
-    public RestaurantService(RestaurantRepository restaurantRepository) {
+
+    public RestaurantService(RestaurantRepository restaurantRepository,
+                             MenuRepository menuRepository,
+                             VoteRepository voteRepository,
+                             Clock clock) {
         this.repository = restaurantRepository;
+        this.menuRepository = menuRepository;
+        this.voteRepository = voteRepository;
+        this.clock = clock;
     }
 
     @Cacheable("restaurantTos")
+    @Transactional
     public List<RestaurantTo> getAll() {
         LocalDate today = LocalDate.now(clock);
+        List<Menu> menusOfTheDay = menuRepository.getByDate(today);
+
         return repository.findAll().stream()
                 .map(r -> new RestaurantTo(
                         r.id(),
                         r.getName(),
-                        menuRepository.getByDateAndRestaurantId(today, r.id())))
+                        menusOfTheDay.stream()
+                                .filter(menu -> menu.getRestaurant().getId() == r.id())
+                                .findFirst()
+                                .orElse(null)))
                 .collect(Collectors.toList());
     }
+
     @CacheEvict(value = "restaurantTos", allEntries = true)
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "restaurant must not be null");
