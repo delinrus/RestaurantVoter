@@ -1,6 +1,8 @@
 package ru.voidelectrics.restaurantvoter.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,6 +23,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
         "classpath:spring/spring-db.xml"
 })
 @Transactional
+@Sql(scripts = "classpath:db/populateDB-test.sql", config = @SqlConfig(encoding = "UTF-8"))
 abstract public class AbstractControllerTest extends TimeMockingTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();

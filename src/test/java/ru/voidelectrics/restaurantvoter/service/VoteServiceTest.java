@@ -23,7 +23,7 @@ import static ru.voidelectrics.restaurantvoter.VoteTestData.*;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = "classpath:db/populateDB-test.sql", config = @SqlConfig(encoding = "UTF-8"))
 class VoteServiceTest extends TimeMockingTest {
 
     @Autowired
