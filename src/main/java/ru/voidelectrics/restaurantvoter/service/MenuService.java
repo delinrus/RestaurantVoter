@@ -58,10 +58,8 @@ public class MenuService {
         }
         menu.setDate(today);
         Menu result = menuRepository.save(menu);
-        for (MenuItem item : menu.getMenuItems()) {
-            item.setMenu(menu);
-            menuItemRepository.save(item);
-        }
+        menu.getMenuItems().forEach(menuItem -> menuItem.setMenu(menu));
+        menuItemRepository.saveAll(menu.getMenuItems());
         return result;
     }
 }
