@@ -67,7 +67,7 @@ class VoteControllerTest extends AbstractControllerTest {
     void update() throws Exception {
         clockMock().setInstant(Instant.parse("2020-08-22T09:00:00Z"));
 
-        perform(MockMvcRequestBuilders.put(REST_URL + "/" + VOTE1_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(new VoteTo(RESTAURANT2.id())))
                 .with(userHttpBasic(USER)))

@@ -51,11 +51,10 @@ public class VoteController {
         return ResponseEntity.created(uriOfNewResource).body(convert(vote));
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody VoteTo voteTo, @PathVariable long id) {
+    public void update(@Valid @RequestBody VoteTo voteTo) {
         long userId = SecurityUtil.authUserId();
-        assureIdConsistent(voteTo, id);
         service.update(voteTo.getRestaurantId(), userId);
     }
 }

@@ -66,8 +66,11 @@ Get All Restaurants command is cached on the service level since it's public and
 #### get all Votes owned by user
 `curl -s http://localhost:8080/restaurantvoter/rest/votes --user user@mail.ru:user`
 
-#### save Vote by User 
+#### create Vote by User 
 `curl -s -X POST -d '{"restaurantId": 100001}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/restaurantvoter/rest/votes --user user@mail.ru:user`
+
+#### update Vote by User 
+`curl -s -X PUT -d '{"restaurantId": 100000}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/restaurantvoter/rest/votes --user user@mail.ru:user`
 
 #### get all Menus
 `curl -s http://localhost:8080/restaurantvoter/rest/admin/menus --user admin@mail.ru:admin`
@@ -77,3 +80,5 @@ Get All Restaurants command is cached on the service level since it's public and
 
 #### save Menu for today
 `curl -s -X POST -d '{"id": 100002,"restaurant":{"id": 100000,"name": "Континенталь"},"menuItems":[{"name": "Макароны с сыром","price": 690},{"name": "Салат Брут","price": 1250}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/restaurantvoter/rest/admin/menus/today --user admin@mail.ru:admin`
+
+For testing purpose there is also SoapUI test project in the root of the repository.
