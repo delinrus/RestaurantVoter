@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID;
+import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT2;
 import static ru.voidelectrics.restaurantvoter.TestUtil.validateRootCause;
 import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN_ID;
 import static ru.voidelectrics.restaurantvoter.UserTestData.USER_ID;
@@ -35,26 +36,22 @@ class VoteServiceTest extends TimeMockingTest {
     }
 
     @Test
-    void changeExistingVote() throws Exception{
+    void changeExistingVote() throws Exception {
         clockMock().setInstant(Instant.parse("2020-08-22T09:15:30Z"));
-        Vote created = service.save(RESTAURANT1_ID, USER_ID);
-        long newId = created.id();
-        Vote newVote = getNew();
-        newVote.setId(newId);
-        newVote.setDate(LocalDate.parse("2020-08-22"));
-        VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-22"), USER_ID), newVote);
+        service.update(RESTAURANT2.id(), USER_ID);
+        VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-22"), USER_ID), getUpdated());
     }
 
     @Test
-    void changeExistingVoteTooLate() throws Exception{
+    void changeExistingVoteTooLate() throws Exception {
         clockMock().setInstant(Instant.parse("2020-08-22T11:02:00Z"));
-        validateRootCause(() -> service.save(RESTAURANT1_ID, USER_ID), RequestForbidden.class);
+        validateRootCause(() -> service.update(RESTAURANT1_ID, USER_ID), RequestForbidden.class);
     }
 
     @Test
-    void firstVoteAfterNoChangeTime() throws Exception{
+    void firstVoteAfterNoChangeTime() throws Exception {
         clockMock().setInstant(Instant.parse("2020-08-23T11:02:00Z"));
-        Vote created = service.save(RESTAURANT1_ID, USER_ID);
+        Vote created = service.create(RESTAURANT1_ID, USER_ID);
         long newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);
@@ -63,9 +60,9 @@ class VoteServiceTest extends TimeMockingTest {
     }
 
     @Test
-    void createNewVote() throws Exception{
+    void createNewVote() throws Exception {
         clockMock().setInstant(Instant.parse("2020-08-23T09:00:00Z"));
-        Vote created = service.save(RESTAURANT1_ID, USER_ID);
+        Vote created = service.create(RESTAURANT1_ID, USER_ID);
         long newId = created.id();
         Vote newVote = getNew();
         newVote.setId(newId);

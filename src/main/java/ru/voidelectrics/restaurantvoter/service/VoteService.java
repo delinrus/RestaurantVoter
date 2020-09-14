@@ -7,12 +7,14 @@ import ru.voidelectrics.restaurantvoter.model.Vote;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 import ru.voidelectrics.restaurantvoter.repository.UserRepository;
 import ru.voidelectrics.restaurantvoter.repository.VoteRepository;
+import ru.voidelectrics.restaurantvoter.util.exeption.IllegalRequestDataException;
 import ru.voidelectrics.restaurantvoter.util.exeption.RequestForbidden;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 public class VoteService {
@@ -35,20 +37,40 @@ public class VoteService {
         return voteRepository.getAll(userId);
     }
 
-    @Transactional
-    public Vote save(long restaurantId, long userId) {
+    private Vote saveHelper(long restaurantId, long userId, Consumer<Vote> exitChecks) {
         LocalDate today = LocalDate.now(clock);
         Vote vote = new Vote();
         Vote previousVote = voteRepository.getByDateAndUserId(today, userId);
-        if (previousVote != null) {
-            if (isTooLateForChangingVote()) {
-                throw new RequestForbidden(RequestForbidden.FORBIDDEN_TIME_MSG);
-            }
-            vote.setId(previousVote.getId());
-        }
+        exitChecks.accept(previousVote); // Checking if operation is permitted, throwing exception otherwise
         vote.setUser(userRepository.getOne(userId));
         vote.setDate(today);
         vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        if (previousVote != null) {
+            vote.setId(previousVote.getId());
+        }
+        return vote;
+    }
+
+    @Transactional
+    public void update(long restaurantId, long userId) {
+        Vote vote = saveHelper(restaurantId, userId, (previousVote) -> {
+            if (previousVote == null) {
+                throw new IllegalRequestDataException("No vote to update");
+            }
+            if (isTooLateForChangingVote()) {
+                throw new RequestForbidden(RequestForbidden.FORBIDDEN_TIME_MSG);
+            }
+        });
+        voteRepository.save(vote);
+    }
+
+    @Transactional
+    public Vote create(long restaurantId, long userId) {
+        Vote vote = saveHelper(restaurantId, userId, (previousVote) -> {
+            if (previousVote != null) {
+                throw new IllegalRequestDataException("Vote already exists");
+            }
+        });
         return voteRepository.save(vote);
     }
 
