@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.voidelectrics.restaurantvoter.model.Restaurant;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
@@ -18,9 +19,17 @@ import java.util.List;
 public class MenuTo {
 
     @NotNull
-    private Restaurant restaurant;
+    private Long restaurantId;
 
     @Valid
     @JsonProperty("menuItems")
     private List<MenuItemTo> menuItemTos;
+
+    public MenuTo(Long restaurantId, MenuItemTo menuItem, MenuItemTo... menuItems) {
+        this.restaurantId = restaurantId;
+        List<MenuItemTo> list = new ArrayList<>();
+        list.add(menuItem);
+        list.addAll(Arrays.asList(menuItems));
+        this.menuItemTos = list;
+    }
 }

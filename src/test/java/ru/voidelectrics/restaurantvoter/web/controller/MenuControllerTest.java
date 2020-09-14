@@ -18,8 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.voidelectrics.restaurantvoter.MenuTestData.MENU1;
-import static ru.voidelectrics.restaurantvoter.MenuTestData.MENU_MATCHER;
+import static ru.voidelectrics.restaurantvoter.MenuTestData.*;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID;
 import static ru.voidelectrics.restaurantvoter.TestUtil.readFromJson;
 import static ru.voidelectrics.restaurantvoter.TestUtil.userHttpBasic;
@@ -50,17 +49,16 @@ class MenuControllerTest extends AbstractControllerTest {
 
     @Test
     void saveForToday() throws Exception {
-        Menu newMenu = MenuTestData.getNew();
-
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/today")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
-                .content(JsonUtil.writeValue(newMenu)))
+                .content(JsonUtil.writeValue(getNewTo())))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         Menu created = readFromJson(action, Menu.class);
         long newId = created.getId();
+        Menu newMenu = MenuTestData.getNew();
         newMenu.setId(newId);
         newMenu.setDate(LocalDate.now(clockMock()));
         long restaurantId = newMenu.getRestaurant().getId();

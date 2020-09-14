@@ -1,6 +1,5 @@
 package ru.voidelectrics.restaurantvoter.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +7,7 @@ import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.model.MenuItem;
 import ru.voidelectrics.restaurantvoter.repository.MenuItemRepository;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
+import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 import ru.voidelectrics.restaurantvoter.to.MenuTo;
 import ru.voidelectrics.restaurantvoter.util.ToConversionUtil;
 
@@ -17,29 +17,31 @@ import java.util.List;
 
 @Service
 public class MenuService {
-    @Autowired
-    private final MenuRepository repository;
+    private final Clock clock;
 
-    @Autowired
-    Clock clock;
+    private final MenuRepository menuRepository;
 
-    @Autowired
-    MenuItemRepository menuItemRepository;
+    private final MenuItemRepository menuItemRepository;
 
-    public MenuService(MenuRepository repository) {
-        this.repository = repository;
+    private final RestaurantRepository restaurantRepository;
+
+    public MenuService(Clock clock, MenuRepository repository, MenuItemRepository menuItemRepository, RestaurantRepository restaurantRepository) {
+        this.clock = clock;
+        this.menuRepository = repository;
+        this.menuItemRepository = menuItemRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     public List<Menu> getAll() {
-        return repository.findAll();
+        return menuRepository.findAll();
     }
 
     public Menu getByDateAndRestaurantId(LocalDate date, long restaurantId) {
-        return repository.getByDateAndRestaurantId(date, restaurantId);
+        return menuRepository.getByDateAndRestaurantId(date, restaurantId);
     }
 
     public Menu getForToday(Long restaurantId) {
-        return repository.getByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
+        return menuRepository.getByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
     }
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
@@ -47,14 +49,15 @@ public class MenuService {
     public Menu saveForToday(MenuTo menuTo) {
         Menu menu = ToConversionUtil.convert(menuTo);
         LocalDate today = LocalDate.now(clock);
+        menu.setRestaurant(restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null));
         menu.setId(null);
-        Menu previous = repository.getByDateAndRestaurantId(today, menu.getRestaurant().getId());
+        Menu previous = menuRepository.getByDateAndRestaurantId(today, menu.getRestaurant().getId());
         if (previous != null) {
             /// repository.delete(previous);
-            repository.delete(previous.id());
+            menuRepository.delete(previous.id());
         }
         menu.setDate(today);
-        Menu result = repository.save(menu);
+        Menu result = menuRepository.save(menu);
         for (MenuItem item : menu.getMenuItems()) {
             item.setMenu(menu);
             menuItemRepository.save(item);

@@ -2,12 +2,13 @@ package ru.voidelectrics.restaurantvoter;
 
 import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.model.MenuItem;
+import ru.voidelectrics.restaurantvoter.to.MenuTo;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT2;
+import static ru.voidelectrics.restaurantvoter.util.ToConversionUtil.convert;
 
 public class MenuTestData {
 
@@ -39,6 +40,10 @@ public class MenuTestData {
 
     public static Menu getNew() {
         return new Menu(null, RESTAURANT2, null, NEW_MENU_ITEM1, NEW_MENU_ITEM2);
+    }
+
+    public static MenuTo getNewTo() {
+        return new MenuTo(RESTAURANT2.id(), convert(NEW_MENU_ITEM1), convert(NEW_MENU_ITEM2));
     }
 
 }
