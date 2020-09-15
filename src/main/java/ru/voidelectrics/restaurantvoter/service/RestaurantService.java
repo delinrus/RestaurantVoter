@@ -23,18 +23,14 @@ public class RestaurantService {
 
     private final MenuRepository menuRepository;
 
-    private final VoteRepository voteRepository;
-
     private final Clock clock;
 
 
     public RestaurantService(RestaurantRepository restaurantRepository,
                              MenuRepository menuRepository,
-                             VoteRepository voteRepository,
                              Clock clock) {
         this.repository = restaurantRepository;
         this.menuRepository = menuRepository;
-        this.voteRepository = voteRepository;
         this.clock = clock;
     }
 
