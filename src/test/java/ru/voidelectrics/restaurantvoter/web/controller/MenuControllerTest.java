@@ -23,7 +23,6 @@ import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID
 import static ru.voidelectrics.restaurantvoter.TestUtil.readFromJson;
 import static ru.voidelectrics.restaurantvoter.TestUtil.userHttpBasic;
 import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN;
-import static ru.voidelectrics.restaurantvoter.UserTestData.USER;
 
 class MenuControllerTest extends AbstractControllerTest {
 

@@ -18,7 +18,6 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class User extends AbstractBaseEntity {
 
     @Column(name = "email", nullable = false, unique = true)

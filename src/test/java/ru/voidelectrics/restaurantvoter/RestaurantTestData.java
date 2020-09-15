@@ -10,7 +10,7 @@ import static ru.voidelectrics.restaurantvoter.MenuTestData.MENU3;
 import static ru.voidelectrics.restaurantvoter.model.AbstractBaseEntity.START_SEQ;
 
 public class RestaurantTestData {
-    public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingEqualsAssertions(Restaurant.class);
+    public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsWithIgnoringAssertions(Restaurant.class);
     public static final long RESTAURANT1_ID = START_SEQ;
     public static final Restaurant RESTAURANT1 = new Restaurant(RESTAURANT1_ID, "Континенталь");
     public static final Restaurant RESTAURANT2 = new Restaurant(RESTAURANT1_ID + 1, "Дон помидор");

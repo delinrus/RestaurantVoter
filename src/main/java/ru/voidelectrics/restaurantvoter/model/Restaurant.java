@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @Setter
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class Restaurant extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotNull

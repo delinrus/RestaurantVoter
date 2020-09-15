@@ -6,13 +6,17 @@ import ru.voidelectrics.restaurantvoter.to.MenuTo;
 
 import java.time.LocalDate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT2;
 import static ru.voidelectrics.restaurantvoter.util.ToConversionUtil.convert;
 
 public class MenuTestData {
-
-    public static TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingEqualsAssertions(Menu.class);
+    public static TestMatcher<Menu> MENU_MATCHER =  TestMatcher.usingAssertions(Menu.class,
+           (a, e) -> assertThat(a).usingRecursiveComparison().ignoringAllOverriddenEquals().isEqualTo(e),
+           (a, e) -> {
+               throw new UnsupportedOperationException();
+           });
 
 
     public static final MenuItem MENU_ITEM1 = new MenuItem(100008L, "Божественная яишенка", 1000);

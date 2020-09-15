@@ -2,7 +2,9 @@ package ru.voidelectrics.restaurantvoter.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.voidelectrics.restaurantvoter.util.DateUtil;
@@ -18,7 +20,6 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class Vote extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -12,7 +12,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 @Table(name = "menu_items")
@@ -54,17 +53,7 @@ public class MenuItem extends AbstractBaseEntity {
                 "id=" + id +
                 ", name=" + name +
                 ", price=" + price +
-                (menu != null ?  ", menuId=" + menu.id  :  "") +
+                (menu != null ? ", menuId=" + menu.id : "") +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        MenuItem menuItem = (MenuItem) o;
-        return price == menuItem.price &&
-                Objects.equals(name, menuItem.name);
     }
 }

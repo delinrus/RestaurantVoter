@@ -16,8 +16,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menus_unique_restaurant_date_idx")})
@@ -52,16 +50,4 @@ public class Menu extends AbstractBaseEntity {
         this.menuItems = list;
         this.menuItems.forEach(mi -> mi.setMenu(this));
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Menu menu = (Menu) o;
-        return Objects.equals(restaurant, menu.restaurant) &&
-                Objects.equals(date, menu.date) &&
-                Objects.equals(menuItems, menu.menuItems);
-    }
-
 }
