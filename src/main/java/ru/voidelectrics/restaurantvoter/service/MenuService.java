@@ -4,7 +4,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.voidelectrics.restaurantvoter.model.Menu;
-import ru.voidelectrics.restaurantvoter.model.MenuItem;
 import ru.voidelectrics.restaurantvoter.repository.MenuItemRepository;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
@@ -14,6 +13,9 @@ import ru.voidelectrics.restaurantvoter.util.ToConversionUtil;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static ru.voidelectrics.restaurantvoter.util.ToConversionUtil.convert;
 
 @Service
 public class MenuService {
@@ -32,22 +34,22 @@ public class MenuService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public List<Menu> getAll() {
-        return menuRepository.findAll();
+    public List<MenuTo> getAll() {
+        return menuRepository.findAll().stream().map(ToConversionUtil::convert).collect(Collectors.toList());
     }
 
     public Menu getByDateAndRestaurantId(LocalDate date, long restaurantId) {
         return menuRepository.getByDateAndRestaurantId(date, restaurantId);
     }
 
-    public Menu getForToday(Long restaurantId) {
-        return menuRepository.getByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
+    public MenuTo getForToday(Long restaurantId) {
+        return convert(menuRepository.getByDateAndRestaurantId(LocalDate.now(clock), restaurantId));
     }
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
     @Transactional
-    public Menu saveForToday(MenuTo menuTo) {
-        Menu menu = ToConversionUtil.convert(menuTo);
+    public MenuTo saveForToday(MenuTo menuTo) {
+        Menu menu = convert(menuTo);
         LocalDate today = LocalDate.now(clock);
         menu.setRestaurant(restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null));
         menu.setId(null);
@@ -60,6 +62,6 @@ public class MenuService {
         Menu result = menuRepository.save(menu);
         menu.getMenuItems().forEach(menuItem -> menuItem.setMenu(menu));
         menuItemRepository.saveAll(menu.getMenuItems());
-        return result;
+        return convert(result);
     }
 }

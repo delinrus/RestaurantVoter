@@ -8,9 +8,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.voidelectrics.restaurantvoter.TestMatcher;
 import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.service.RestaurantService;
+import ru.voidelectrics.restaurantvoter.util.exeption.NotFoundException;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -59,7 +59,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
 
-        validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), EntityNotFoundException.class);
+        validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), NotFoundException.class);
     }
 
 
@@ -69,7 +69,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
 
-        validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), EntityNotFoundException.class);
+        validateRootCause(() -> restaurantService.get(RESTAURANT1_ID), NotFoundException.class);
     }
 
     @Test

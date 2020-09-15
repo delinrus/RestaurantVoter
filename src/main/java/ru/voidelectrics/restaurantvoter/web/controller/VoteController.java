@@ -17,7 +17,6 @@ import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static ru.voidelectrics.restaurantvoter.util.ToConversionUtil.convert;
-import static ru.voidelectrics.restaurantvoter.util.ValidationUtil.assureIdConsistent;
 import static ru.voidelectrics.restaurantvoter.util.ValidationUtil.checkNew;
 
 @RestController

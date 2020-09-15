@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.voidelectrics.restaurantvoter.MenuTestData;
-import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.service.MenuService;
+import ru.voidelectrics.restaurantvoter.to.MenuTo;
 import ru.voidelectrics.restaurantvoter.web.json.JsonUtil;
 
 import java.time.Instant;
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,6 +21,7 @@ import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID
 import static ru.voidelectrics.restaurantvoter.TestUtil.readFromJson;
 import static ru.voidelectrics.restaurantvoter.TestUtil.userHttpBasic;
 import static ru.voidelectrics.restaurantvoter.UserTestData.ADMIN;
+import static ru.voidelectrics.restaurantvoter.util.ToConversionUtil.convert;
 
 class MenuControllerTest extends AbstractControllerTest {
 
@@ -43,7 +42,7 @@ class MenuControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(MENU_MATCHER.contentJson(MENU1));
+                .andExpect(MENU_TO_MATCHER.contentJson(convert(MENU1)));
     }
 
     @Test
@@ -55,12 +54,9 @@ class MenuControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        Menu created = readFromJson(action, Menu.class);
-        long newId = created.getId();
-        Menu newMenu = MenuTestData.getNew();
-        newMenu.setId(newId);
-        newMenu.setDate(LocalDate.now(clockMock()));
-        long restaurantId = newMenu.getRestaurant().getId();
+        MenuTo created = readFromJson(action, MenuTo.class);
+        MenuTo newMenu = getNewTo();
+        long restaurantId = newMenu.getRestaurantId();
 
         assertThat(created).usingRecursiveComparison()
                 .ignoringFields("menuItems.id", "menuItems.menu")

@@ -1,8 +1,6 @@
 package ru.voidelectrics.restaurantvoter.to;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +9,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class MenuItemTo {
 
     @NotBlank
@@ -20,5 +20,4 @@ public class MenuItemTo {
     // Price measured in cents
     @Range(min = 1)
     private int price;
-
 }

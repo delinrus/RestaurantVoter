@@ -8,6 +8,8 @@ import ru.voidelectrics.restaurantvoter.model.Menu;
 
 import java.util.Objects;
 
+import static ru.voidelectrics.restaurantvoter.util.ToConversionUtil.convert;
+
 @Setter
 @Getter
 @ToString
@@ -18,12 +20,12 @@ public class RestaurantTo {
 
     private String name;
 
-    private Menu todayMenu;
+    private MenuTo todayMenuTo;
 
     public RestaurantTo(Long id, String name, Menu todayMenu) {
         this.id = id;
         this.name = name;
-        this.todayMenu = todayMenu;
+        this.todayMenuTo = convert(todayMenu);
     }
 
     @Override
@@ -33,11 +35,11 @@ public class RestaurantTo {
         RestaurantTo that = (RestaurantTo) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(todayMenu, that.todayMenu);
+                Objects.equals(todayMenuTo, that.todayMenuTo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, todayMenu);
+        return Objects.hash(id, name, todayMenuTo);
     }
 }

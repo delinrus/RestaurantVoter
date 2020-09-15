@@ -1,10 +1,7 @@
 package ru.voidelectrics.restaurantvoter.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -16,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 public class MenuTo {
 
     @NotNull
@@ -32,4 +30,5 @@ public class MenuTo {
         list.addAll(Arrays.asList(menuItems));
         this.menuItemTos = list;
     }
+
 }

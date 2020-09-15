@@ -3,7 +3,6 @@ package ru.voidelectrics.restaurantvoter.web.controller;
 import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.service.MenuService;
 import ru.voidelectrics.restaurantvoter.to.MenuTo;
 
@@ -26,17 +25,17 @@ public class MenuController {
     }
 
     @GetMapping
-    public List<Menu> getAll() {
+    public List<MenuTo> getAll() {
         return service.getAll();
     }
 
     @GetMapping(value = "/today")
-    public Menu getForToday(@RequestParam(value = "restaurantId") Long restaurantId) {
+    public MenuTo getForToday(@RequestParam(value = "restaurantId") Long restaurantId) {
         return service.getForToday(restaurantId);
     }
 
     @PostMapping(value = "/today")
-    public Menu saveForToday(@Valid @RequestBody MenuTo menuTo) {
+    public MenuTo saveForToday(@Valid @RequestBody MenuTo menuTo) {
         return service.saveForToday(menuTo);
     }
 }

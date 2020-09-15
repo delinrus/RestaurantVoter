@@ -9,13 +9,14 @@ import ru.voidelectrics.restaurantvoter.model.Menu;
 import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
-import ru.voidelectrics.restaurantvoter.repository.VoteRepository;
 import ru.voidelectrics.restaurantvoter.to.RestaurantTo;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.voidelectrics.restaurantvoter.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class RestaurantService {
@@ -58,7 +59,7 @@ public class RestaurantService {
     }
 
     public Restaurant get(Long id) {
-        return repository.getOne(id);
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
     @CacheEvict(value = "restaurantTos", allEntries = true)
