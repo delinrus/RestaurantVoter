@@ -54,7 +54,7 @@ public class ToConversionUtil {
         }
         VoteTo voteTo = new VoteTo();
         voteTo.setId(vote.getId());
-        voteTo.setRestaurantId(vote.getRestaurant().getId());
+        voteTo.setRestaurantId(vote.getRestaurantId());
         return voteTo;
     }
 

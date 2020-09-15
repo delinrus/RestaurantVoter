@@ -56,7 +56,7 @@ class VoteControllerTest extends AbstractControllerTest {
         Vote newVote = new Vote();
         long newId = created.id();
         newVote.setId(newId);
-        newVote.setRestaurant(RESTAURANT1);
+        newVote.setRestaurantId(RESTAURANT1.getId());
         newVote.setDate(LocalDate.parse("2020-08-23"));
 
         assertEquals(created.getRestaurantId(), RESTAURANT1.id());
@@ -78,7 +78,7 @@ class VoteControllerTest extends AbstractControllerTest {
         Vote newVote = new Vote();
         long newId = created.id();
         newVote.setId(newId);
-        newVote.setRestaurant(RESTAURANT2);
+        newVote.setRestaurantId(RESTAURANT2.id());
         newVote.setDate(LocalDate.parse("2020-08-22"));
         VOTE_MATCHER.assertMatch(created, newVote);
     }

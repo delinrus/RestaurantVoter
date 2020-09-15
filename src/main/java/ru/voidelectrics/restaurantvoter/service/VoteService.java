@@ -44,7 +44,8 @@ public class VoteService {
         exitChecks.accept(previousVote); // Checking if operation is permitted, throwing exception otherwise
         vote.setUser(userRepository.getOne(userId));
         vote.setDate(today);
-        vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+      //  vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+        vote.setRestaurantId(restaurantId);
         if (previousVote != null) {
             vote.setId(previousVote.getId());
         }

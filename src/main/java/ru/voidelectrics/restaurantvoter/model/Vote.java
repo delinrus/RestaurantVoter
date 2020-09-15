@@ -29,11 +29,10 @@ public class Vote extends AbstractBaseEntity {
     @JsonIgnore
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @Column(name="restaurant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private Restaurant restaurant;
+    private Long restaurantId;
 
     @Column(name = "date")
     @JsonFormat(pattern = DateUtil.FORMAT)
@@ -42,7 +41,7 @@ public class Vote extends AbstractBaseEntity {
 
     public Vote(Long id, Restaurant restaurant, LocalDate date) {
         super(id);
-        this.restaurant = restaurant;
+        this.restaurantId = restaurant.getId();
         this.date = date;
     }
 
@@ -50,7 +49,7 @@ public class Vote extends AbstractBaseEntity {
     public String toString() {
         return "Vote{" +
                 "id=" + id +
-                ", restaurant=" + restaurant +
+                ", restaurantId=" + restaurantId +
                 ", date=" + date +
                 '}';
     }
