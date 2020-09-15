@@ -13,7 +13,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 
-    Menu getByDateAndRestaurantId(LocalDate date, long restaurantId);
+    @Query("SELECT m FROM Menu m WHERE m.restaurant.id=:restaurantId AND m.date=:date")
+    Menu getByDateAndRestaurantId(@Param("date")LocalDate date, @Param("restaurantId")long restaurantId);
 
     List<Menu> getByDate(LocalDate date);
 
