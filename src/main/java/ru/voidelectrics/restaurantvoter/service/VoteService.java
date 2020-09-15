@@ -1,10 +1,10 @@
 package ru.voidelectrics.restaurantvoter.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.voidelectrics.restaurantvoter.model.Vote;
-import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 import ru.voidelectrics.restaurantvoter.repository.UserRepository;
 import ru.voidelectrics.restaurantvoter.repository.VoteRepository;
 import ru.voidelectrics.restaurantvoter.util.exeption.IllegalRequestDataException;
@@ -20,17 +20,15 @@ import java.util.function.Consumer;
 public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
-    private final RestaurantRepository restaurantRepository;
+    private final Clock clock;
 
-    @Autowired
-    private Clock clock;
 
     public VoteService(VoteRepository voteRepository,
                        UserRepository userRepository,
-                       RestaurantRepository restaurantRepository) {
+                       Clock clock) {
         this.voteRepository = voteRepository;
         this.userRepository = userRepository;
-        this.restaurantRepository = restaurantRepository;
+        this.clock = clock;
     }
 
     public List<Vote> getAll(long userId) {
@@ -44,7 +42,6 @@ public class VoteService {
         exitChecks.accept(previousVote); // Checking if operation is permitted, throwing exception otherwise
         vote.setUser(userRepository.getOne(userId));
         vote.setDate(today);
-      //  vote.setRestaurant(restaurantRepository.getOne(restaurantId));
         vote.setRestaurantId(restaurantId);
         if (previousVote != null) {
             vote.setId(previousVote.getId());
@@ -53,6 +50,7 @@ public class VoteService {
     }
 
     @Transactional
+    @CacheEvict(value = "voteCounts", allEntries = true)
     public void update(long restaurantId, long userId) {
         Vote vote = saveHelper(restaurantId, userId, (previousVote) -> {
             if (previousVote == null) {
@@ -66,6 +64,7 @@ public class VoteService {
     }
 
     @Transactional
+    @CacheEvict(value = "voteCounts", allEntries = true)
     public Vote create(long restaurantId, long userId) {
         Vote vote = saveHelper(restaurantId, userId, (previousVote) -> {
             if (previousVote != null) {
@@ -75,10 +74,7 @@ public class VoteService {
         return voteRepository.save(vote);
     }
 
-    public long countTodayVotes(long restaurantId) {
-        return voteRepository.countByDateAndRestaurantId(LocalDate.now(clock), restaurantId);
-    }
-
+    @Cacheable("voteCounts")
     public long countVotes(long restaurantId, LocalDate date) {
         return voteRepository.countByDateAndRestaurantId(date, restaurantId);
     }

@@ -12,6 +12,7 @@ import ru.voidelectrics.restaurantvoter.util.exeption.RequestForbidden;
 import java.time.Instant;
 import java.time.LocalDate;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT1_ID;
 import static ru.voidelectrics.restaurantvoter.RestaurantTestData.RESTAURANT2;
 import static ru.voidelectrics.restaurantvoter.TestUtil.validateRootCause;
@@ -68,5 +69,15 @@ class VoteServiceTest extends TimeMockingTest {
         newVote.setId(newId);
         newVote.setDate(LocalDate.parse("2020-08-23"));
         VOTE_MATCHER.assertMatch(service.getByDateAndUserId(LocalDate.parse("2020-08-23"), USER_ID), newVote);
+    }
+
+    @Test
+    void cacheEvicts() throws Exception {
+        clockMock().setInstant(Instant.parse("2020-08-22T09:00:00Z"));
+        long count = service.countVotes(RESTAURANT1_ID, LocalDate.parse("2020-08-22"));
+        assertEquals(2, count);
+        service.update(RESTAURANT2.id(), USER_ID);
+        count = service.countVotes(RESTAURANT1_ID, LocalDate.parse("2020-08-22"));
+        assertEquals(1, count);
     }
 }
