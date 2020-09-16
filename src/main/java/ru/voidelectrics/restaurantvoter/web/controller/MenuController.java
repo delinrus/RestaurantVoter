@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.voidelectrics.restaurantvoter.service.MenuService;
 import ru.voidelectrics.restaurantvoter.to.MenuTo;
+import ru.voidelectrics.restaurantvoter.to.MenuToWithDate;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,7 +26,7 @@ public class MenuController {
     }
 
     @GetMapping
-    public List<MenuTo> getAll() {
+    public List<MenuToWithDate> getAll() {
         return service.getAll();
     }
 

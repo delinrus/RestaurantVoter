@@ -9,6 +9,7 @@ import ru.voidelectrics.restaurantvoter.repository.MenuItemRepository;
 import ru.voidelectrics.restaurantvoter.repository.MenuRepository;
 import ru.voidelectrics.restaurantvoter.repository.RestaurantRepository;
 import ru.voidelectrics.restaurantvoter.to.MenuTo;
+import ru.voidelectrics.restaurantvoter.to.MenuToWithDate;
 import ru.voidelectrics.restaurantvoter.util.ToConversionUtil;
 import ru.voidelectrics.restaurantvoter.util.exeption.IllegalRequestDataException;
 
@@ -38,8 +39,8 @@ public class MenuService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public List<MenuTo> getAll() {
-        return menuRepository.findAll().stream().map(ToConversionUtil::convert).collect(Collectors.toList());
+    public List<MenuToWithDate> getAll() {
+        return menuRepository.findAll().stream().map(ToConversionUtil::convertWithDate).collect(Collectors.toList());
     }
 
     public Menu getByDateAndRestaurantId(LocalDate date, long restaurantId) {

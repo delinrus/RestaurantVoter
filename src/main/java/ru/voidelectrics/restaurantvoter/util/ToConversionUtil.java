@@ -6,6 +6,7 @@ import ru.voidelectrics.restaurantvoter.model.Restaurant;
 import ru.voidelectrics.restaurantvoter.model.Vote;
 import ru.voidelectrics.restaurantvoter.to.MenuItemTo;
 import ru.voidelectrics.restaurantvoter.to.MenuTo;
+import ru.voidelectrics.restaurantvoter.to.MenuToWithDate;
 import ru.voidelectrics.restaurantvoter.to.VoteTo;
 
 import java.util.List;
@@ -46,6 +47,24 @@ public class ToConversionUtil {
                     .collect(Collectors.toList());
             menuTo.setMenuItemTos(menuItemTos);
         }
+        return menuTo;
+    }
+
+    public static MenuToWithDate convertWithDate(Menu menu) {
+        if (menu == null) {
+            return null;
+        }
+        MenuToWithDate menuTo = new MenuToWithDate();
+        menuTo.setRestaurantId(menu.getRestaurant().getId());
+        if (menu.getMenuItems() == null) {
+            menuTo.setMenuItemTos(null);
+        } else {
+            List<MenuItemTo> menuItemTos = menu.getMenuItems().stream()
+                    .map(ToConversionUtil::convert)
+                    .collect(Collectors.toList());
+            menuTo.setMenuItemTos(menuItemTos);
+        }
+        menuTo.setDate(menu.getDate());
         return menuTo;
     }
 
