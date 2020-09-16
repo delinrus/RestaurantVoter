@@ -13,9 +13,7 @@ import ru.voidelectrics.restaurantvoter.util.DateUtil;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menus_unique_restaurant_date_idx")})
@@ -36,18 +34,21 @@ public class Menu extends AbstractBaseEntity {
     @NotNull
     private LocalDate date;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
-    @JsonManagedReference
-    private List<MenuItem> menuItems;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="menu_menu_item",
+            joinColumns=@JoinColumn(name="menu_id"),
+            inverseJoinColumns=@JoinColumn(name="menu_item_id"))
+   // @JsonManagedReference
+    private Set<MenuItem> menuItems = new HashSet<>();
 
     public Menu(Long id, Restaurant restaurant, LocalDate date, MenuItem menuItem, MenuItem... menuItems) {
         super(id);
         this.restaurant = restaurant;
         this.date = date;
-        List<MenuItem> list = new ArrayList<>();
-        list.add(menuItem);
-        list.addAll(Arrays.asList(menuItems));
-        this.menuItems = list;
-        this.menuItems.forEach(mi -> mi.setMenu(this));
+        Set<MenuItem> set = new HashSet<>();
+        set.add(menuItem);
+        set.addAll(Arrays.asList(menuItems));
+        this.menuItems = set;
+        this.menuItems.forEach(mi -> mi.addMenu(this));
     }
 }

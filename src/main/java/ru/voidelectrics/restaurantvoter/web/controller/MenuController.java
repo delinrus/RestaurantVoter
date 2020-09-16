@@ -34,7 +34,7 @@ public class MenuController {
         return service.getForToday(restaurantId);
     }
 
-    @PostMapping(value = "/today")
+    @PutMapping(value = "/today")
     public MenuTo saveForToday(@Valid @RequestBody MenuTo menuTo) {
         return service.saveForToday(menuTo);
     }

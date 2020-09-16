@@ -9,6 +9,7 @@ import ru.voidelectrics.restaurantvoter.to.MenuTo;
 import ru.voidelectrics.restaurantvoter.to.VoteTo;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ToConversionUtil {
@@ -23,9 +24,9 @@ public class ToConversionUtil {
         if (menuTo.getMenuItemTos() == null) {
             menu.setMenuItems(null);
         } else {
-            List<MenuItem> menuItems = menuTo.getMenuItemTos().stream()
-                    .map(to -> new MenuItem(null, to.getName(), to.getPrice()))
-                    .collect(Collectors.toList());
+            Set<MenuItem> menuItems = menuTo.getMenuItemTos().stream()
+                    .map(to -> new MenuItem(to.getId(), menuTo.getRestaurantId(), to.getName(), to.getPrice()))
+                    .collect(Collectors.toSet());
             menu.setMenuItems(menuItems);
         }
         return menu;
@@ -63,6 +64,7 @@ public class ToConversionUtil {
             return null;
         }
         MenuItemTo menuItemTo = new MenuItemTo();
+        menuItemTo.setId(menuItem.getId());
         menuItemTo.setName(menuItem.getName());
         menuItemTo.setPrice(menuItem.getPrice());
         return menuItemTo;

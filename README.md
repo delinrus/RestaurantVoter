@@ -38,12 +38,31 @@ Each restaurant provides new menu each day.
     /rest/admin/**
     /rest/admin/restaurants/**
     /rest/admin/menus/**
+    /rest/admin/menuItems
     
     
 #### Caching strategy
 Get All Restaurants command is cached on the service level since it's public and presumably used most often. The command returns not the Restaurant entity object but the RestaurantTo, which includes fields of Restaurant entity and menu for today.  The cache gets evicted when an admin saves/updates/deletes a menu or restaurant. 
-
-   
+VoteService countVotes command is also cached with the Spring Cache. Cache gets evicted when any user updates or creates a vote.
+#### Saving menu
+User forms JSON-object of Menu, containing Menu Items. If Menu Item id is null, then it saves anew. If id is non-null, then the Menu Item is expected to be taken from an existing menu item list; in this case, fields will be checked before saving to be equal to fields of an existing Menu Item with the same ID.
+  
+Example of an input JSON object.
+  
+   {
+     "restaurantId": 100000,
+     "menuItems":       [
+   			  {
+   		"id": 100009,
+   		"name": "Блинчики",
+   		"price": 500
+   	 },
+   			  {
+   		"name": "Салат Брут",
+   		"price": 1250
+   	 }
+     ]
+   }
    
 ### Curl samples
 > For windows use `Git Bash`
@@ -78,7 +97,16 @@ Get All Restaurants command is cached on the service level since it's public and
 #### get Menu for today
 `curl -s http://localhost:8080/restaurantvoter/rest/admin/menus/today?restaurantId=100000 --user admin@mail.ru:admin`
 
-#### save Menu for today
-`curl -s -X POST -d '{"restaurantId": 100000, "menuItems":[{"name": "Макароны с сыром", "price": 690},{"name": "Салат Брут","price": 1250}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/restaurantvoter/rest/admin/menus/today --user admin@mail.ru:admin`
+#### save Menu for today (all new menu items)
+`curl -s -X PUT -d '{"restaurantId": 100000, "menuItems":[{"name": "Макароны с сыром", "price": 690},{"name": "Салат Брут","price": 1250}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/restaurantvoter/rest/admin/menus/today --user admin@mail.ru:admin`
+
+#### save Menu for today (1 old and 1 new item)
+`curl -s -X PUT -d '{"restaurantId": 100000,"menuItems":[{"id": 100009,"name": "Блинчики","price": 500},{"name": "Салат Брут","price": 1250}]}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/restaurantvoter/rest/admin/menus/today --user admin@mail.ru:admin`
+
+#### get all Menu Items
+`curl -s http://localhost:8080/restaurantvoter/rest/admin/menuItems --user admin@mail.ru:admin`
+
+#### get all Menu Items for Restaurant
+`curl -s http://localhost:8080/restaurantvoter/rest/admin/menuItems?restaurantId=100000 --user admin@mail.ru:admin`
 
 For testing purpose there is also SoapUI test project in the root of the repository.
